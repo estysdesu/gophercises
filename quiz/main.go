@@ -8,13 +8,16 @@ import (
 	"flag"
 	"bufio"
 	"math"
+	"time"
+	"math/rand"
+	"strings"
 )
 
 func main() {
 
 	fileLoc := flag.String("csv", "./problems.csv", "the path to the csv problems file")
 	// timeLimit := flag.Int("time", 30, "the time limit for the quiz")
-	// random := flag.Bool("rand", false, "randomize the questions")
+	random := flag.Bool("rand", false, "randomize the questions")
 	flag.Parse()
 
 	// open the file and defer close
@@ -31,16 +34,30 @@ func main() {
 		log.Println(err)
 	}
 
+	// if random is true then shuffle the array
+	if *random == true {
+		rand.Seed(time.Now().UnixNano())
+		rand.Shuffle(len(csvData), func(i, j int) {
+			csvData[i], csvData[j] = csvData[j], csvData[i]
+		})
+	}
+
 	// iterate the questions and check their output
 	var usrAns string
 	correct := 0
 	buffScanner := bufio.NewScanner(os.Stdin)
 	for indx, data := range csvData {
-		fmt.Printf("Problem %d: %s = ", indx+1, data[0])
+		qu, ans := data[0], data[1]
+
+		fmt.Printf("Problem %d: %s = ", indx+1, qu)
 		buffScanner.Scan()
 		usrAns = buffScanner.Text()
-
-		if usrAns == data[1] {
+		
+		usrAns = strings.TrimSpace(usrAns)
+		usrAns = strings.ToLower(usrAns)
+		ans = strings.ToLower(ans)
+		
+		if usrAns == ans {
 			correct++
 		}
 	}
