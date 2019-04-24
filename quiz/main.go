@@ -7,6 +7,7 @@ import (
 	"log"
 	"flag"
 	"bufio"
+	"math"
 )
 
 func main() {
@@ -30,14 +31,7 @@ func main() {
 		log.Println(err)
 	}
 
-	// make the q&a slices
-	q := make([]string, 0, len(csvData))
-	a := make([]string, 0, len(csvData))
-	for _, data := range csvData {
-		q = append(q, data[0])
-		a = append(a, data[1])
-	}
-
+	// iterate the questions and check their output
 	var usrAns string
 	correct := 0
 	buffScanner := bufio.NewScanner(os.Stdin)
@@ -51,7 +45,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf("Score: %d, Questions: %d, Percentage: %f", correct, len(csvData), float32(correct)/float32(len(csvData)))
+	fmt.Printf("Score: %d, Questions: %d, Percentage: %f%%", correct, len(csvData), math.Round(100 * (float64(correct)/float64(len(csvData)))))
 
 
 }
