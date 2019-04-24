@@ -11,7 +11,6 @@ import (
 func main() {
 
 	fileLoc := flag.String("csv", "./problems.csv", "the path to the csv problems file")
-	flag.Parse()
 
 	// open the file and defer close
 	csvFile, err := os.Open(*fileLoc)
