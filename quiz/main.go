@@ -45,13 +45,13 @@ func main() {
 		})
 	}
 
-	// create time limit channel
-	ticker := time.NewTicker(time.Second * time.Duration(*timeLimit))
-	usrFin := make(chan bool)
-
 	// ask if the user is ready
 	fmt.Print("Ready? (hit 'Enter' to start)")
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
+
+	// create time limit channel
+	timer := time.NewTimer(time.Second * time.Duration(*timeLimit))
+	usrFin := make(chan bool)
 
 	// iterate the questions and check their output
 	var usrAns string
@@ -78,7 +78,7 @@ func main() {
 
 	select {
 	case <-usrFin:
-	case <-ticker.C:
+	case <-timer.C:
 		fmt.Println("\nTime's up!")
 	}
 
